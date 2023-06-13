@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 # Set the compiler to g++
 set(CMAKE_CXX_COMPILER "g++")
 
-# Set the C++ standard to C++11. Necessary flags are automatically set to the g++ compiler.
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 # Set the flags for the compiler
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -21,7 +20,10 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # The source files needed to compile the project executable
 set(SOURCES  
-    ${SRC_DIR}/vector.cpp
+    ${SRC_DIR}/camera.cpp
+    ${SRC_DIR}/object.cpp
+    ${SRC_DIR}/engine.cpp
+    ${SRC_DIR}/particle_sim.cpp
 )
 
 # Add the executable
@@ -32,37 +34,40 @@ target_include_directories(GraphicsEngine
 )
 
 # Add a library to easy link test cases
-add_library(GraphicsEngineLib STATIC ${SOURCES})
-# Add include folder as a private include directory for lib
-target_include_directories(GraphicsEngineLib
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/matrix_lib)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/cimg_lib)
+# Link against the MatriXLib library
+target_link_libraries(GraphicsEngine PRIVATE MatriXLib CImgProject)
 
-# Check if the BUILD_TESTS flag is set
-set(BUILD_TESTS True)
+# Simple CImg compile test
+add_executable(FireWorks ${SRC_DIR}/fireworks.cpp)
+target_link_libraries(FireWorks PRIVATE CImgProject)
 
-if(BUILD_TESTS)
-    # This is needed to install the test executable (dynamic linking)
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+# # Check if the BUILD_TESTS flag is set
+# set(BUILD_TESTS True)
 
-    set(TEST_MAIN tests.cpp)
-    set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
-    set(TESTS 
-        ${TEST_DIR}/veclib_test.cpp
-        )
-    # Executable for tests, linking to library
-    add_executable(GraphicsEngineTest ${TEST_DIR}/${TEST_MAIN} ${TESTS})
-    target_link_libraries(GraphicsEngineTest GraphicsEngineLib)
+# if(BUILD_TESTS)
+#     # This is needed to install the test executable (dynamic linking)
+#     set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-    # Locate GTest
-    find_package(GTest REQUIRED)
-    include_directories(${GTEST_INCLUDE_DIRS})
+#     set(TEST_MAIN tests.cpp)
+#     set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
+#     set(TESTS 
+#         ${TEST_DIR}/veclib_test.cpp
+#         )
+#     # Executable for tests, linking to library
+#     add_executable(GraphicsEngineTest ${TEST_DIR}/${TEST_MAIN} ${TESTS})
+#     target_link_libraries(GraphicsEngineTest GraphicsEngineLib)
 
-    target_link_libraries(GraphicsEngineTest ${GTEST_LIBRARIES} pthread)
-    # Link the test executable with Google Test
-    target_link_libraries(GraphicsEngineTest gtest_main)
+#     # Locate GTest
+#     find_package(GTest REQUIRED)
+#     include_directories(${GTEST_INCLUDE_DIRS})
+
+#     target_link_libraries(GraphicsEngineTest ${GTEST_LIBRARIES} pthread)
+#     # Link the test executable with Google Test
+#     target_link_libraries(GraphicsEngineTest gtest_main)
     
-    # Add the test executable to CTest
-    include(GoogleTest)
-    gtest_discover_tests(GraphicsEngineTest)
-endif()
+#     # Add the test executable to CTest
+#     include(GoogleTest)
+#     gtest_discover_tests(GraphicsEngineTest)
+# endif()
