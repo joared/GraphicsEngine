@@ -5,8 +5,14 @@ set(CMAKE_CXX_COMPILER "g++")
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Set the build type (default to "Release" if not specified)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 # Set the flags for the compiler
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3")
 # add any other flags as needed
 
 # Define the project. Can be used to modify the behaviour of the build.

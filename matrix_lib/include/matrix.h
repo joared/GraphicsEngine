@@ -51,6 +51,8 @@ class Matrix
         // Element get and set
         constexpr const DATA_TYPE& operator()(unsigned int row, unsigned int col) const { return m_data[row*COLS + col]; }
         constexpr DATA_TYPE& operator()(unsigned int row, unsigned int col) { return m_data[row*COLS + col]; }
+        constexpr const DATA_TYPE& operator[](unsigned int i) const { return m_data[i]; }
+        constexpr DATA_TYPE& operator[](unsigned int i) { return m_data[i]; }
 
         // Transpose
         constexpr Matrix<DATA_TYPE, COLS, ROWS> transpose() const

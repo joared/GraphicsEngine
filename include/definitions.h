@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "rotmat.h"
 #include "point.h"
+#include "rotvec.h"
 
 #include <utility>
 #include <vector>
@@ -18,6 +19,7 @@ typedef std::vector<Vector3> PointList; // TODO: shouldnt be Vector3
 
 typedef matx::Vector3d Translation;
 typedef matx::RotMat RotMat;
+typedef matx::RotVecd RotVec;
 
 typedef cimg_library::CImg<unsigned char> Img;
 typedef std::pair<int, int> ImgPoint; // x, y

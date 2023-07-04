@@ -22,15 +22,21 @@ class Camera
             return ImgPoint((int)x, (int)y);
         }
 
-        constexpr void move(Translation displacement)
+        constexpr void move(const Translation& displacement)
         {
             m_t += m_r*displacement;
         }
 
         constexpr void rotate(double yaw, double pitch, double roll)
         {
+            // TODO: remove matx dependency
             RotMat delta = matx::Rotation::eulerToRotMat(pitch, yaw, roll);
             m_r = m_r*delta;
+        }
+
+        constexpr void rotate(RotVec r)
+        {
+            m_r = r.asRotMat()*m_r;
         }
 
         const RotMat& rot() const { return m_r; };
@@ -38,6 +44,8 @@ class Camera
         const Translation& t() const { return m_t; }
         Translation& t() { return m_t; }
         
+        const double& fx() { return m_fx; }
+
     private:
         RotMat m_r;
         Translation m_t;

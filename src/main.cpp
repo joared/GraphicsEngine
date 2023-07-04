@@ -13,6 +13,10 @@ int main()
 
     Engine engine;
     engine.addObject(EngineObject::Grid());
+    auto xWall = EngineObject::Grid();
+    xWall.rot() = matx::Rotation::eulerToRotMat(0, 1.57, 0);
+    xWall.t()[0] = 5;
+    engine.addObject(xWall);
     engine.addObject(EngineObject());
 
     ParticleSim particleSim;
@@ -27,8 +31,7 @@ int main()
     double dt = (double)delay/1000.0;
     while (!disp.is_closed() && !disp.is_keyESC() ) //!disp.is_keyQ() 
     {
-        img*=0.0f;
-        img += 290;
+        img = 290;
         
         img.draw_text(5,5," %u frames/s ",white,red,0.5f,13,(unsigned int)disp.frames_per_second());
 
@@ -51,25 +54,36 @@ int main()
         // engine.setCameraRot(yaw, pitch, roll);
         if (disp.is_keyARROWUP()) engine.rotateCamera(0, -incRot, 0);
         if (disp.is_keyARROWDOWN()) engine.rotateCamera(0, incRot, 0);
-        if (disp.is_keyQ()) engine.rotateCamera(-incRot, 0, 0);
-        if (disp.is_keyE()) engine.rotateCamera(incRot, 0, 0);
+        if (disp.is_keyQ()) engine.rotateCamera(RotVec({0,0,incRot}));
+        if (disp.is_keyE()) engine.rotateCamera(-1.0*RotVec({0,0,incRot})); // Weird bug if using constexpr camera.rotate while also pressing space
         if (disp.button()&2) particleSim.addFireWork();
         if (disp.button()&1 || disp.is_keySPACE()) 
         {
             ParticleSim::Particle p 
             {
                 engine.camera().t()+Vector3({0,0,-0.8}),
-                Vector3({engine.camera().rot()(0,2),engine.camera().rot()(1,2)-0.3,engine.camera().rot()(2,2)})*10.0,
+                Vector3({engine.camera().rot()(0,2),engine.camera().rot()(1,2),engine.camera().rot()(2,2)})*20.0,
                 0,
                 {255,255,55},
-                10,
+                50,
                 0.01,
                 true,
                 2.0//*(double)std::rand()/RAND_MAX + 1.5
             };
             particleSim.addFireWork(p);
         }
-        engine.camera().t().data()[2] = 1.8;
+        if (disp.is_keyF())
+        {
+            for (auto& p : particleSim.particles())
+            {
+                if (p.isFireWork)
+                {
+                    engine.lookAt(p.position);
+                }
+            }
+        }
+        
+        //engine.camera().t().data()[2] = 1.8;
     }
   return 0;
   

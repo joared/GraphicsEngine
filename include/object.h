@@ -12,6 +12,7 @@ namespace GE
             EngineObject();
             EngineObject(PointList points);
             static EngineObject Grid();
+            static EngineObject Grid(RotMat rot, Translation t);
             const PointList& points() const { return m_points; }
             PointList& points() { return m_points; }
             unsigned char* color();

@@ -22,6 +22,7 @@ class ParticleSim
             double lifeTime;
             bool isFireWork;
             double explodeTime;
+            bool isCamCoord = false;
         };
 
         typedef std::vector<Particle> ParticleList;

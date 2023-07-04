@@ -26,10 +26,13 @@ class Vector : public Matrix<DATA_TYPE, SIZE, 1>
             {
                 auto v = this->operator()(i, 1);
                 squaredLength += v*v;
-                // m_d
             }
 
             return std::sqrt(squaredLength);
+        }
+        constexpr Vector norm()
+        {
+            return Vector((*this)*(1.0/len()));
         }
 };
 

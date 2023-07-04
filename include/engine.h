@@ -12,11 +12,13 @@ namespace GE
         public:
             Engine();
             virtual void addObject(EngineObject obj);
-            virtual ImgPointList& projectObjectPoints(EngineObject& obj, ImgPointList& imgPoints);
+            virtual PointList& transformObjectPoints(EngineObject& obj, PointList& camPoints);
             virtual void draw(Img& img);
             virtual Camera& camera();
             virtual void moveCamera(double right, double down, double forward);
             virtual void rotateCamera(double yaw, double pitch, double roll);
+            virtual void rotateCamera(RotVec r);
+            virtual void lookAt(const Vector3& point);
             virtual void setCameraRot(double yaw, double pitch, double roll);
         private:
             Camera m_camera;

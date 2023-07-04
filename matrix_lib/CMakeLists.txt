@@ -15,6 +15,7 @@ if(BUILD_TESTS)
     set(TESTS 
         ${TEST_DIR}/matrix_test.cpp
         ${TEST_DIR}/rotmat_test.cpp
+        ${TEST_DIR}/rotvec_test.cpp
         ${TEST_DIR}/vector_test.cpp
         )
     # Executable for tests, linking to library
