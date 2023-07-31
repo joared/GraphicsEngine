@@ -2,26 +2,15 @@
 #include "CImg.h"
 #include "engine.h"
 #include "object.h"
-#include "particle_sim.h"
 
 
 using namespace cimg_library;
 
 int main()
 {
-    std::cout << "hello!" << std::endl;
-
     Engine engine;
-    auto grid = EngineObject::Grid();
-    engine.addObject(grid);
-    auto xWall = EngineObject::Grid();
-    xWall.rot() = matx::Rotation::eulerToRotMat(0, 1.57, 0);
-    xWall.t()[0] = 5;
-    engine.addObject(xWall);
-    auto tmp = EngineObject();
-    engine.addObject(tmp);
-
-    ParticleSim particleSim;
+    engine.addObject(EngineObject::Grid());
+    engine.addObject(EngineObject());
 
     CImg<unsigned char> img(640,480,1,3,255);
     CImgDisplay disp(img,"[#21] - Fireworks (Click to add/explode rockets)");

@@ -33,17 +33,23 @@ set(SOURCES
 )
 
 # Add the executable
-add_executable(GraphicsEngine ${SRC_DIR}/${SRC_MAIN} ${SOURCES})
-# Add include folder as a private include directory for GraphicsEngine
-target_include_directories(GraphicsEngine
+# add_executable(GraphicsEngine ${SRC_DIR}/${SRC_MAIN} ${SOURCES})
+# target_include_directories(GraphicsEngine
+#   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+# )
+# target_link_libraries(GraphicsEngine PRIVATE MatriXLib CImgProject)
+
+add_executable(RobotArm ${SRC_DIR}/robot_arm_sim.cpp ${SOURCES})
+target_include_directories(RobotArm
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+target_link_libraries(RobotArm PRIVATE MatriXLib CImgProject)
 
 # Add a library to easy link test cases
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/matrix_lib)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/cimg_lib)
 # Link against the MatriXLib library
-target_link_libraries(GraphicsEngine PRIVATE MatriXLib CImgProject)
+
 
 # Simple CImg compile test
 add_executable(FireWorks ${SRC_DIR}/fireworks.cpp)

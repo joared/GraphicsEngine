@@ -11,8 +11,8 @@ namespace GE
     {
         public:
             Engine();
-            virtual void addObject(EngineObject obj);
-            virtual PointList& transformObjectPoints(EngineObject& obj, PointList& camPoints);
+            virtual void addObject(EngineObjectPtr obj);
+            virtual PointList& transformObjectPoints(EngineObjectPtr obj, PointList& camPoints);
             virtual void draw(Img& img);
             virtual Camera& camera();
             virtual void moveCamera(double right, double down, double forward);

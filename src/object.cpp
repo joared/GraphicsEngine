@@ -2,7 +2,7 @@
 
 namespace GE
 {
-    EngineObject::EngineObject() : m_color{0, 0, 255}
+    EngineObject::EngineObject() : m_r(), m_t(), m_color{0, 0, 255}
     {
         double scale = 0.1;
         m_points.push_back(Vector3({1, 1, 0}));
@@ -18,7 +18,7 @@ namespace GE
             p *= scale;
     }
     
-    EngineObject::EngineObject(PointList points) : m_color{128, 0, 0}
+    EngineObject::EngineObject(PointList points) : m_color{255, 0, 0}
     {
         m_points = points;
     }
@@ -40,5 +40,10 @@ namespace GE
     unsigned char* EngineObject::color()
     {
         return m_color;
+    }
+
+    bool EngineObject::draw(Img &img, PointList& camPoints, Camera& camera)
+    {
+        return false;
     }
 }

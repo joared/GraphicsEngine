@@ -24,7 +24,7 @@ class Vector : public Matrix<DATA_TYPE, SIZE, 1>
             DATA_TYPE squaredLength = 0;
             for (unsigned int i=0; i<SIZE; ++i)
             {
-                auto v = this->operator()(i, 1);
+                DATA_TYPE v = this->operator()(i, 1);
                 squaredLength += v*v;
             }
 

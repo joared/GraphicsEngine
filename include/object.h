@@ -3,6 +3,9 @@
 
 #include "definitions.h"
 #include "vector"
+#include "camera.h"
+
+#include <memory>
 
 namespace GE
 {
@@ -17,6 +20,8 @@ namespace GE
             PointList& points() { return m_points; }
             unsigned char* color();
 
+            virtual bool draw(Img& img, PointList& camPoints, Camera& camera);
+
             const RotMat& rot() const { return m_r; };
             RotMat& rot() { return m_r; };
             const Translation& t() const { return m_t; }
@@ -28,7 +33,8 @@ namespace GE
             Translation m_t;
     };
 
-    typedef std::vector<EngineObject> ObjectList;
+    typedef std::shared_ptr<EngineObject> EngineObjectPtr;
+    typedef std::vector<EngineObjectPtr> ObjectList;
 }
 
 #endif /* OBJECT */

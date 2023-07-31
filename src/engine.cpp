@@ -12,20 +12,20 @@ Engine::Engine()
     setCameraRot(0, -M_PI/2, 0);
 }
 
-void Engine::addObject(EngineObject obj)
+void Engine::addObject(EngineObjectPtr obj)
 {
     m_objects.push_back(obj);
 }
 
-PointList& Engine::transformObjectPoints(EngineObject& obj, PointList& camPoints)
+PointList& Engine::transformObjectPoints(EngineObjectPtr obj, PointList& camPoints)
 {
     auto cameraRotInv = m_camera.rot().inv(); // precalculate inverse camera rotation
     // std::cout << "Camera:\n" << m_camera.rot().str() << "\n" << m_camera.t().str() << std::endl;
     // std::cout << "Object:\n" << obj.rot().str() << "\n" << obj.t().str() << std::endl;
-    for (auto p : obj.points())
+    for (auto& p : obj->points())
     {
         // transform object points to world frame
-        Vector3 world = obj.t() + obj.rot()*p;
+        Vector3 world = obj->t() + obj->rot()*p;
         // transform world points to camera frame
         Vector3 cameraToPoint = world - m_camera.t();
         Vector3 camera = cameraRotInv*cameraToPoint;
@@ -40,26 +40,30 @@ void Engine::draw(Img& img)
 {
     //const unsigned char blue[] = { 0,0,255 }, red[] = { 128,0,0 };
 
-    for (auto obj : m_objects)
+    for (auto& obj : m_objects)
     {
         PointList camPoints;
         transformObjectPoints(obj, camPoints);
-        for (size_t i = 0; i < camPoints.size(); ++i) 
+
+        if (!obj->draw(img, camPoints, m_camera))
         {
-            Vector3 camP = camPoints[i];
-            if (camP.data()[2] > 0)
+            for (size_t i = 0; i < camPoints.size(); ++i) 
             {
-                Point3 cameraP(camP.data()[0], camP.data()[1], camP.data()[2]);
-                ImgPoint imgP = m_camera.project(cameraP);
-                img.draw_circle(imgP.first, imgP.second, 50.0/camP.len(), obj.color(), 1);
-            }
-            
-            // for (size_t j = i + 1; j < imgPoints.size(); ++j) 
-            // {
+                Vector3 camP = camPoints[i];
+                if (camP.data()[2] > 0)
+                {
+                    Point3 cameraP(camP.data()[0], camP.data()[1], camP.data()[2]);
+                    ImgPoint imgP = m_camera.project(cameraP);
+                    img.draw_circle(imgP.first, imgP.second, 5.0/camP.len(), obj->color(), 1);
+                }
                 
-            //     ImgPoint imgPNext = imgPoints[j];
-            //     img.draw_line(imgP.first, imgP.second, imgPNext.first, imgPNext.second, obj.color(), 1);
-            // }
+                // for (size_t j = i + 1; j < imgPoints.size(); ++j) 
+                // {
+                    
+                //     ImgPoint imgPNext = imgPoints[j];
+                //     img.draw_line(imgP.first, imgP.second, imgPNext.first, imgPNext.second, obj.color(), 1);
+                // }
+            }
         }
     }
 }
